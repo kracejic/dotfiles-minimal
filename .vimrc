@@ -68,9 +68,9 @@ command! Ctagsgenerate :!ctags -R .
 " for pasting in terminal
 set pastetoggle=<F2>
 
+nnoremap <leader>a <C-A>
 set splitbelow    " more natural split opening
 set splitright    " more natural split opening
-
 "split movement
 nnoremap <C-h> <C-w>h
 nnoremap <C-k> <C-w>k
@@ -96,7 +96,6 @@ nnoremap <C-w><C-w><C-w>j <C-w>+
 :command! Bda :bufdo bd
 
 :command! Bd bp|bd<space>#
-
 :nnoremap <leader>W :Bd<CR>
 
 " syntax enable           " enable syntax processing
@@ -134,6 +133,17 @@ nmap <leader>sy :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '>
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
+" duplicate lanes TODO
+nmap <leader>dd :s/\(^.*$\)/\1\r\1/<CR>:noh<CR>
+xmap <leader>dd :'<,'>s/\(.*\)/\1\r\1/<CR>:noh<CR>
+
+" json indent
+command! -range -nargs=0 -bar IndentJson <line1>,<line2>!python -m json.tool
+command! -range -nargs=0 -bar JsonIndent <line1>,<line2>!python -m json.tool
+
+"xml indent
+command! IndentXml :silent %!xmllint --encode UTF-8 --format -
+command! XmlIndent :silent %!xmllint --encode UTF-8 --format -
 augroup filetypedetect
     au BufRead,BufNewFile *.log set filetype=log
     au BufReadPost,BufNewFile *.compositor set ft=compositor
@@ -154,7 +164,9 @@ set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
 nnoremap <space> za
+nnoremap z<space> zA
 set foldmethod=indent   " fold based on indent level
+
 
 " Paste without yanking selected
 xnoremap <leader>p "_dP
@@ -168,6 +180,7 @@ xnoremap X "_X
 
 
 " movement
+
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
@@ -186,6 +199,9 @@ nnoremap <leader>d1 :diffget 1<CR>
 nnoremap <leader>d2 :diffget 2<CR>
 nnoremap <leader>d3 :diffget 3<CR>
 
+command! Diffstart :windo diffthis
+command! Diffstop :diffoff!
+
 "Advanced
 set undolevels=1000 "Number of undo levels
 set backspace=indent,eol,start  "Backspace behaviour
@@ -197,7 +213,7 @@ au CursorHold * checktime
 
 set tabpagemax=50 " max number of pages
 
-colorscheme themeinabox
+" colorscheme themeinabox
 
 "save with root
 command! Wroot :execute ':silent w !sudo tee % > /dev/null' | :edit!
@@ -242,6 +258,7 @@ nnoremap cQ :call SetupCR()<CR>#``qz
 
 vnoremap <expr> cq ":\<C-u>call SetupCR()\<CR>" . "gv" . g:mc . "``qz"
 vnoremap <expr> cQ ":\<C-u>call SetupCR()\<CR>" . "gv" . substitute(g:mc, '/', '?', 'g') . "``qz"
+
 
 
 " -----------------------------------------------------------------------------
@@ -319,3 +336,131 @@ if has('persistent_undo')
 endif
 
 " -----------------------------------------------------------------------------
+
+set t_Co=256
+let g:colors_name = "themeinabox"
+
+hi Normal                    guifg=#dfdfdf guibg=#262626 ctermfg=188 ctermbg=235
+hi VertSplit                 guifg=#444444 guibg=#262626 gui=NONE ctermfg=238 ctermbg=235 cterm=NONE
+hi Search                    guifg=#000000 guibg=#5f5f87 ctermfg=0 ctermbg=60 cterm=NONE
+hi Visual                    guibg=#5f5f87 ctermbg=60
+hi LineNr                    guifg=#666666 ctermfg=242
+hi Cursor                    guifg=#000000 guibg=#FFFFFF ctermfg=0 ctermbg=15
+hi CursorLine                guibg=#323232 gui=NONE ctermbg=236 cterm=NONE
+hi CursorLineNr              guifg=#666666 gui=NONE ctermfg=253 cterm=NONE
+hi ColorColumn               guibg=#1c1c1c ctermbg=234
+hi! link CursorColumn ColorColumn
+hi SignColumn                guifg=#FFFFFF guibg=NONE ctermfg=15 ctermbg=NONE
+
+" StatusLine
+" Bold
+hi User1                     guifg=#eeeeee guibg=#606060 gui=bold ctermfg=255 ctermbg=241 cterm=bold
+" Yellow
+hi User2                     guifg=#FFAF00 guibg=#606060 gui=bold ctermfg=214 ctermbg=241 cterm=bold
+" Green
+hi User3                     guifg=#5fff00 guibg=#606060 gui=bold ctermfg=82 ctermbg=241 cterm=bold
+" Red
+hi User4                     guifg=#870000 guibg=#606060 gui=bold ctermfg=88 ctermbg=241 cterm=bold
+hi User5                     guifg=#e4e4e4 guibg=#606060 gui=bold ctermfg=254 ctermbg=241 cterm=bold
+hi User6                     guifg=#e4e4e4 guibg=#606060 gui=bold ctermfg=254 ctermbg=241 cterm=bold
+hi User7                     guifg=#e4e4e4 guibg=#606060 gui=bold ctermfg=254 ctermbg=241 cterm=bold
+hi User8                     guifg=#e4e4e4 guibg=#606060 gui=bold ctermfg=254 ctermbg=241 cterm=bold
+hi User9                     guifg=#e4e4e4 guibg=#606060 gui=bold ctermfg=254 ctermbg=241 cterm=bold
+hi StatusLine                guifg=#e4e4e4 guibg=#606060 gui=NONE ctermfg=254 ctermbg=241 cterm=NONE
+hi StatusLineNC              guifg=#585858 guibg=#303030 gui=NONE ctermfg=240 ctermbg=236 cterm=NONE
+
+" Folds
+" -----
+" line used for closed folds
+hi Folded                    guifg=#af87d7 guibg=NONE gui=NONE ctermfg=140 ctermbg=NONE cterm=NONE
+hi! link FoldColumn SignColumn
+
+" Invisible Characters
+" ------------------
+hi NonText                   guifg=#767676 gui=NONE cterm=NONE ctermfg=243
+hi SpecialKey                guifg=#767676 gui=NONE cterm=NONE ctermfg=243
+
+" Misc
+" ----
+" directory names and other special names in listings
+hi Directory                 guifg=#87af5f gui=NONE ctermfg=107 cterm=NONE
+
+" Popup Menu
+" ----------
+" normal item in popup
+hi Pmenu                     guifg=#ffffff guibg=#444444 gui=NONE ctermfg=15 ctermbg=238 cterm=NONE
+" selected item in popup
+hi PmenuSel                  guifg=#000000 guibg=#87af5f gui=NONE ctermfg=0 ctermbg=107 cterm=NONE
+" scrollbar in popup
+hi PMenuSbar                 guibg=#5A647E gui=NONE ctermfg=15 ctermbg=60 cterm=NONE
+" thumb of the scrollbar in the popup
+hi PMenuThumb                guifg=#ffffff guibg=#a8a8a8 gui=NONE ctermfg=15 ctermbg=248 cterm=NONE
+
+" Code constructs
+" ---------------
+hi Comment                   guifg=#7d7d7d ctermfg=244
+hi Todo                      guifg=#df5f5f guibg=NONE gui=bold ctermfg=167 ctermbg=NONE cterm=bold
+hi Constant                  guifg=#d75faf ctermfg=169
+hi Error                     guifg=#990000 guibg=NONE ctermfg=88 ctermbg=NONE
+hi WarningMsg                guifg=#800000 guibg=NONE ctermfg=1 ctermbg=NONE
+hi ErrorMsg                  guifg=#800000 guibg=NONE ctermfg=1 ctermbg=NONE
+hi Identifier                guifg=#a6e043 gui=NONE ctermfg=149 cterm=NONE
+hi Keyword                   guifg=#e09146 gui=NONE ctermfg=173 cterm=NONE
+hi Number                    guifg=#78add2 ctermfg=110
+hi Statement                 guifg=#e09146 gui=NONE ctermfg=173 cterm=NONE
+hi String                    guifg=#78add2 ctermfg=110
+hi! link Title Statement
+hi Type                      guifg=#e0a743 gui=NONE ctermfg=179 cterm=NONE
+hi PreProc                   guifg=#ff8700 ctermfg=208
+hi Special                   guifg=#afd75f ctermfg=149
+
+" C++
+" ---
+
+hi Operator                  guifg=#e88958 ctermfg=173
+
+" Diffs
+" -----
+hi DiffAdd                   guifg=#e4e4e4 guibg=#005f00 ctermfg=254 ctermbg=22
+hi DiffDelete                guifg=#000000 guibg=#5f0000 gui=bold ctermfg=16 ctermbg=52 cterm=bold
+hi DiffChange                guibg=#1c1c1c ctermbg=234
+hi DiffText                  guifg=#FFFFFF guibg=#5f0087 gui=bold ctermfg=15 ctermbg=54 cterm=bold
+
+hi diffAdded                 guifg=#008700 ctermfg=28
+hi diffRemoved               guifg=#800000 ctermfg=1
+hi diffNewFile               guifg=#FFFFFF guibg=NONE gui=bold ctermfg=15 ctermbg=NONE cterm=bold
+hi diffFile                  guifg=#FFFFFF guibg=NONE gui=bold ctermfg=15 ctermbg=NONE cterm=bold
+
+
+" Python
+" ------
+hi pythonExceptions          guifg=#ffaf87 ctermfg=216
+hi pythonDoctest             guifg=#8787ff ctermfg=105
+hi pythonDoctestValue        guifg=#87d7af ctermfg=115
+
+" Mail
+" ----
+hi mailEmail                 guifg=#87af5f ctermfg=107 gui=italic cterm=underline
+hi mailHeaderKey             guifg=#ffdf5f ctermfg=221
+hi! link mailSubject mailHeaderKey
+
+" Spell
+" ----
+hi SpellBad                  guifg=#D70000 guibg=NONE gui=undercurl ctermfg=160 ctermbg=NONE cterm=underline
+hi SpellRare                 guifg=#df5f87 guibg=NONE gui=underline ctermfg=168 ctermbg=NONE cterm=underline
+hi SpellCap                  guifg=#dfdfff guibg=NONE gui=underline ctermfg=189 ctermbg=NONE cterm=underline
+hi SpellLocal                guifg=#00FFFF guibg=NONE gui=undercurl ctermfg=51 ctermbg=NONE cterm=underline
+hi MatchParen                guifg=#FFFFFF guibg=#005f5f ctermfg=15 ctermbg=23
+
+" XML
+" ---
+hi xmlTag                    guifg=#dfaf5f ctermfg=179
+hi xmlTagName                guifg=#dfaf5f ctermfg=179
+hi xmlEndTag                 guifg=#dfaf5f ctermfg=179
+
+" HTML
+" ----
+hi! link htmlTag              xmlTag
+hi! link htmlTagName          xmlTagName
+hi! link htmlEndTag           xmlEndTag
+

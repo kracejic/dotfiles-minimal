@@ -42,10 +42,22 @@ alias ll="ls -alh"
 alias lls="ls -lh --color"
 alias cd..="cd .."
 alias lsf="ls -al | grep -i"
-alias psf="ps -A | grep -i"
+alias psf="ps aux -A | grep -i"
+alias psmem="ps aux --sort -rss"
 alias grepp="grep -Rnsi"
 
 alias g="git"
+
+# easy find
+findfunction() {
+  find 2>/dev/null -L -iname "*$1*" ${@:2}
+}
+alias findn=findfunction
+alias findbig="find ./ -type f -print0 | xargs -0 du | sort -n | tail -n 100 | cut -f2 | xargs -I{} du -sh {}"
+alias findbigdir="find ./ -maxdepth 1 -type d -print0 | xargs -0 du --max-depth=1 | sort -n | tail -n 50 | tail -n +1 | cut -f2 | xargs -I{} du -sh {}"
+
+alias sc="sudo systemctl"
+alias sj="sudo journalctl"
 
 alias ..='cd ..'
 alias ...='cd ../../'
@@ -57,19 +69,6 @@ alias .5='cd ../../../../..'
 # set vi mode
 # http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
 set -o vi
-
-# nice, more readable manual! This is a must
-man() {
-    env \
-    LESS_TERMCAP_mb=$'\e[01;31m' \
-    LESS_TERMCAP_md=$'\e[01;38;5;74m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[46;30m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[04;38;5;146m' \
-    man "$@"
-}
 
 # same installation commands
 if [ -e /etc/yum.conf ] ; then
@@ -93,8 +92,8 @@ if [ -e /etc/pacman.conf ] ; then
     alias ashowlocal="pacman --color always -Qi"
     alias alistall="pacman --color always -Q"
     alias alistallexplicit="pacman --color always -Qqe"
-    alias update="sudo pacman -Qu"
-    alias upgrade="sudo pacman -Syyu"
+    alias update="sudo pacman --color always -Qu"
+    alias upgrade="sudo pacman --color always -Syyu"
 fi
 if [ -d /etc/apt ] ; then
     alias ainstall="sudo apt-get install"
@@ -119,6 +118,24 @@ if [ -d /mingw32 ] ; then
     alias alistall="pacman --color always -Q"
     alias update="pacman -Qu"
     alias upgrade="pacman -Syyu"
+fi
+
+# nice, more readable manual! This is a must
+man() {
+    env \
+    LESS_TERMCAP_mb=$'\e[01;31m' \
+    LESS_TERMCAP_md=$'\e[01;38;5;74m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[46;30m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[04;38;5;146m' \
+    man "$@"
+}
+
+# load custom promt and commands
+if [ -f "$HOME/.promt" ]; then
+  . "$HOME/.promt"
 fi
 
 #select best editor

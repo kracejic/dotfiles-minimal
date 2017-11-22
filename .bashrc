@@ -23,6 +23,7 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+
 #------------------------------------------------------------------------------
 # custom
 
@@ -34,6 +35,7 @@ pathadd() {
 pathadd "/home/${USER}/bin/"
 
 # PS1="\[\033[38;5;215m\]\u@\h \[$(tput sgr0)\]\[\033[38;5;12m\]\w \[$(tput sgr0)\]"
+# PS1='\[\e[1;31m\]\u@\h\[\e[m\] $MSYSTEM \[\e[1;34m\]\w \[\e[0m\]'
 PS1='\[\e[1;31m\]\u@\h\[\e[m\] \[\e[1;34m\]\w \[\e[0m\]'
 
 alias ls="ls --color"
@@ -45,8 +47,13 @@ alias lsf="ls -al | grep -i"
 alias psf="ps aux -A | grep -i"
 alias psmem="ps aux --sort -rss"
 alias grepp="grep -Rnsi"
+alias c="clear"
 
 alias g="git"
+
+alias makep="prettyfier make"
+alias cmakep="prettyfier cmake"
+alias ninjap="prettyfier ninja"
 
 # easy find
 findfunction() {
@@ -58,17 +65,6 @@ alias findbigdir="find ./ -maxdepth 1 -type d -print0 | xargs -0 du --max-depth=
 
 alias sc="sudo systemctl"
 alias sj="sudo journalctl"
-
-alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-alias .4='cd ../../../../'
-alias .5='cd ../../../../..'
-
-# set vi mode
-# http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
-set -o vi
 
 # same installation commands
 if [ -e /etc/yum.conf ] ; then
@@ -120,6 +116,48 @@ if [ -d /mingw32 ] ; then
     alias upgrade="pacman -Syyu"
 fi
 
+## set some other defaults ##
+alias df="df -hT"
+alias du='du -ch'
+alias less_="less"
+alias less="less -r"
+alias grep='grep --color'
+alias grep_="grep --color=never"
+alias grep="grep --color=always"
+
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+
+# for badly configured servers
+alias ssh_nopubkey="ssh -o PubkeyAuthentication=no"
+
+
+## pass options to free ##
+alias meminfo='free -m -l -t'
+
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+alias updateycm='cd ~/.vim/bundle/YouCompleteMe && git pull && git pull --recurse-submodules && ./install.py --clang-completer'
+alias updateycmall='cd ~/.vim/bundle/YouCompleteMe && git pull && git pull --recurse-submodules && ./install.py --clang-completer --gocode-completer --tern-completer --tern-completer'
+
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+
+## Get server cpu info ##
+alias cpuinfo='lscpu'
+
+weather() {
+curl -s wttr.in/$1
+}
+
+
 # nice, more readable manual! This is a must
 man() {
     env \
@@ -138,6 +176,28 @@ if [ -f "$HOME/.promt" ]; then
   . "$HOME/.promt"
 fi
 
+# set vi mode
+# http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
+set -o vi
+
+
+# bind home and end to ESC+insert on ^ and $
+# http://stackoverflow.com/questions/4200800/in-bash-how-do-i-bind-a-function-key-to-a-command
+# http://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html
+# Not needed on most system, needed on ubuntu... :(
+if [ $(grep Ubuntau /etc/lsb-release | wc -l) != "0" ] ; then 
+    bind -m vi-insert '"\e[1~":"\eI"'
+    bind -m vi-insert '"\e[4~":"\eA"'
+    bind -m vi '"\e[1~":"^"'
+    bind -m vi '"\e[4~":"$"'
+fi
+# page up and page down 
+bind -m vi '"\e[5~":"\e[A"'
+bind -m vi-insert '"\e[5~":"\e[A"'
+bind -m vi '"\e[6~":"\e[B"'
+bind -m vi-insert '"\e[6~":"\e[B"'
+
+#------------------------------------------------------------------------------
 #select best editor
 if hash nvim 2>/dev/null; then
     export EDITOR=nvim

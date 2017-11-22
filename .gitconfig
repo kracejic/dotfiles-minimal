@@ -27,7 +27,7 @@
     untracked = cyan
 [alias]
     #short status
-    s = status -s -b 
+    s = status -s -b
 
     #create new branch and check it out
     cb = checkout -b

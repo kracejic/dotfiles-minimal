@@ -35,7 +35,6 @@ set incsearch   "Searches for strings incrementally
 nmap \q :nohlsearch<CR>
 nnoremap <leader><space> :noh<cr>
 
-set spellfile=~/.vim/spell.misc.utf-8.add
 
 set virtualedit=onemore  "allow to go one character behind the end of the line
 set autoindent  "Auto-indent new lines
@@ -109,6 +108,9 @@ nnoremap <leader>sw :%s/\s\+$//<cr>:let @/=''<CR>
 command! Stripwhitespace :%s/\s\+$//
 command! Whitespacestrip :%s/\s\+$//
 
+" z= choose spell          ]s [s move 
+" zg add to spellfile      zw add as bad,           zug/zuw remove from spellfile
+set spellfile=~/.vim/spell.misc.utf-8.add
 command! Spellen :setlocal spell spelllang=en_us
 command! Spellcs :setlocal spell spelllang=cs
 command! Spellnone :setlocal nospell
@@ -156,10 +158,15 @@ augroup filetypedetect
     au BufReadPost,BufNewFile *.crt set ft=crt
 augroup END
 
+
+let g:syntastic_cpp_compiler_options = "-std=c++14"
+" add constant
+nmap <leader>acr /[,)]<CR>:nohlsearch<CR>Bhi&<ESC>?[,(]<CR>:nohlsearch<CR>wiconst <ESC>
 command! E :e %:p:h
 command! LS :!ls -alh --color=always %:p:h
 
 "folding
+
 set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max

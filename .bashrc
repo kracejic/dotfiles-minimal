@@ -121,9 +121,9 @@ alias df="df -hT"
 alias du='du -ch'
 alias less_="less"
 alias less="less -r"
-alias grep='grep --color'
-alias grep_="grep --color=never"
-alias grep="grep --color=always"
+# alias grep='grep --color'
+# alias grep_="grep --color=never"
+# alias grep="grep --color=always"
 
 alias ..='cd ..'
 alias ...='cd ../../'
@@ -185,11 +185,13 @@ set -o vi
 # http://stackoverflow.com/questions/4200800/in-bash-how-do-i-bind-a-function-key-to-a-command
 # http://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html
 # Not needed on most system, needed on ubuntu... :(
-if [ $(grep Ubuntau /etc/lsb-release | wc -l) != "0" ] ; then 
-    bind -m vi-insert '"\e[1~":"\eI"'
-    bind -m vi-insert '"\e[4~":"\eA"'
-    bind -m vi '"\e[1~":"^"'
-    bind -m vi '"\e[4~":"$"'
+if [ -f /etc/lsb-release ] ; then
+    if [ $(grep Ubuntu /etc/lsb-release | wc -l) != "0" ] ; then 
+        bind -m vi-insert '"\e[1~":"\eI"'
+        bind -m vi-insert '"\e[4~":"\eA"'
+        bind -m vi '"\e[1~":"^"'
+        bind -m vi '"\e[4~":"$"'
+    fi
 fi
 # page up and page down 
 bind -m vi '"\e[5~":"\e[A"'

@@ -33,7 +33,7 @@ $1 ${*:2} 2>&1 | \
     -e "s/\(^[^#^[]*\)ANT /\1${BUILD}ANT ${NORMAL}/g" \
     -e "s/\(^[^#^[^U]*\)LD /\1${BUILD}LD ${NORMAL}/g" \
     -e "s/\(^[^#]*\)Note:/\1${GREY}Note:${NORMAL}/gI" \
-    -e "s/\(^###*\) \(.*\)/${GREY}\1${BLUE}\2${NORMAL}/gI" \
+    -e "s/\(^###*\) \(.*\)/${GREY}\1${BLUE} \2${NORMAL}/gI" \
     -e "s/\(^\[.*\]\)\( Built.*$\)/\1${GREY}\2${NORMAL}/gI" \
     -e "s/\(^\[.*\]\)\( Bui.*$\)/\1${GREEN}\2${NORMAL}/gI" \
     -e "s/\(^\[.*\]\)\( Lin.*$\)/\1${GREENBOLD}\2${NORMAL}/gI" \
@@ -57,7 +57,9 @@ $1 ${*:2} 2>&1 | \
     -e "s/\(^100%\) tests passed/${GREEN}\1 tests passed${NORMAL}/g" \
     -e "s/\(^[0-9]*%\) tests passed/${REDBOLD}\1 tests passed${NORMAL}/g" \
     -e "s/\(^\[*INFO:*\]*\)/${GREY}\1${NORMAL}/gI" \
+    -e "s/\(PASS\)/${GREEN}\1${NORMAL}/gI" \
     -e "s/\(SUCCESS\)/${GREEN}\1${NORMAL}/gI" \
+    -e "s/\(FAIL\)/${REDBOLD}\1${NORMAL}/gI" \
     -e "s/\(FAILURE\)/${REDBOLD}\1${NORMAL}/gI" \
     -e "s/\(^Downloading:\)\(.*\)$/${BLUE}\1${GREY}\2${NORMAL}/gI" \
     -e "s/\(^Downloaded:\)\(.*\)$/${GREEN}\1${GREY}\2${NORMAL}/gI" \

@@ -6,9 +6,7 @@
     pager = less -r
 
 [color]
-    branch = auto
-    diff = auto
-    status = auto
+    ui = auto
 
 [color "branch"]
     current = yellow reverse
@@ -50,6 +48,7 @@
     mnff = merge --no-ff
 
     rb = rebase
+    rba = rebase --autosquash
     rbi = rebase -i
     rbcont = rebase --continue
     rbas = rebase --autostash
@@ -103,7 +102,7 @@
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 
     #Human aliases :)
-    branches = branch -a
+    branches = for-each-ref --sort=-committerdate --format=\"%(color:bold black)%(authordate:relative)\t%(color:white)%(authorname)\t%(color:cyan bold)%(HEAD) %(color:green nobold)%(refname:short) %(color:white)-> %(upstream:short)\" refs/heads refs/remotes
     tags = tag
     stashes = stash list
     remotes = remote -v
@@ -147,10 +146,15 @@
 
     # use git fixup COMMIT to change a specific "COMMIT", exactly like you would use git commit --amend to change the latest one.
     # You can use all git commit arguments, like -a, -p and filenames. It will respect your index, so you can use git add. It won't touch the changes you are not committing.
-    fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
+    fixuprb = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 
+
+[rebase]
+    autostash = true
+[fetch]
+    prune = true
 [push]
-    default = simple
+    default = current
     followTags = true
 [merge]
     defaultToUpstream = true
@@ -160,3 +164,7 @@
     indentHeuristic = true
 [credential]
     helper = store
+[remote-hg]
+    track-branches = false
+[commit]
+    verbose = 1

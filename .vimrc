@@ -68,6 +68,7 @@ command! Ctagsgenerate :!ctags -R .
 set pastetoggle=<F2>
 
 nnoremap <leader>a <C-A>
+" Splits
 set splitbelow    " more natural split opening
 set splitright    " more natural split opening
 "split movement
@@ -134,6 +135,14 @@ nnoremap <leader>5 :colorscheme themeinabox-transparent<cr>:AirlineTheme base16_
 nmap <leader>sy :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+
+"goto next file
+:nmap <C-`> :e#<CR>
+
+"toc for markdown
+nmap <leader>toc :g/^#/#<CR> :noh <CR>
+nmap <leader>defs :g/def /#<CR> :noh <CR>
 
 " duplicate lanes TODO
 nmap <leader>dd :s/\(^.*$\)/\1\r\1/<CR>:noh<CR>

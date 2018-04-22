@@ -7,10 +7,12 @@ filetype off                  " required
 set number  "Show line numbers
 set relativenumber
 nmap <leader>num :set nu! <CR>:set rnu!<CR>
+nmap <leader>gnum :set g:nu! <CR>:set g:rnu!<CR>
 set wrap  "enable wraping
 set linebreak   "Break lines at word (requires Wrap lines)
 set nolist         " list disables linebreak
 set scrolloff=5         " 2 lines above/below cursor when scrolling
+set noswapfile  " turn off swapfiles
 
 " :imap jj <Esc>
 :imap <C-L> <Esc>
@@ -55,6 +57,9 @@ set mouse=v             " use mouse in visual mode (not normal,insert,command,he
 set t_ut=
 set previewheight=7
 
+set fillchars+=vert:│         " nicer vert split separator
+set fillchars+=stlnc:-        " nicer separator for horizontal split
+
 "display whitespace
 set listchars=tab:>-,trail:~,extends:>,precedes:<
 "set listchars=eol: ,tab:>-,trail:~,extends:>,precedes:<
@@ -63,11 +68,21 @@ set tags=./tags;/   "This will look in the current directory for 'tags', and wor
 set cscopetag
 
 command! Ctagsgenerate :!ctags -R .
+command! Gtagsgenerate :!gtags
+" let GtagsCscope_Auto_Load = 1
+" find references
+nnoremap <leader>ygr "zyiw:cs find c <C-r>z<CR>
 
 " for pasting in terminal
 set pastetoggle=<F2>
 
 nnoremap <leader>a <C-A>
+" increment numbers
+noremap + <c-a>
+noremap - <c-x>
+
+
+
 " Splits
 set splitbelow    " more natural split opening
 set splitright    " more natural split opening
@@ -89,14 +104,15 @@ nnoremap <C-w><C-w><C-w>l <C-w>>
 nnoremap <C-w><C-w><C-w>k <C-w>-
 nnoremap <C-w><C-w><C-w>j <C-w>+
 
-" buffers
-:nmap \] :bnext<CR>
-:nmap \[ :bprev<CR>
-:nmap <leader>w :bd<CR>
-:command! Bda :bufdo bd
 
-:command! Bd bp|bd<space>#
-:nnoremap <leader>W :Bd<CR>
+" buffers
+nmap \] :bnext<CR>
+nmap \[ :bprev<CR>
+nmap <leader>w :bd<CR>
+command! Bda :bufdo bd
+nnoremap <bs> <c-^>
+command! Bd bp|bd<space>#
+nnoremap <leader>W :Bd<CR>
 
 " syntax enable           " enable syntax processing
 syntax on           " enable syntax processing
@@ -109,7 +125,7 @@ nnoremap <leader>sw :%s/\s\+$//<cr>:let @/=''<CR>
 command! Stripwhitespace :%s/\s\+$//
 command! Whitespacestrip :%s/\s\+$//
 
-" z= choose spell          ]s [s move 
+" z= choose spell          ]s [s move
 " zg add to spellfile      zw add as bad,           zug/zuw remove from spellfile
 set spellfile=~/.vim/spell.misc.utf-8.add
 command! Spellen :setlocal spell spelllang=en_us
@@ -147,6 +163,9 @@ nmap <leader>defs :g/def /#<CR> :noh <CR>
 " duplicate lanes TODO
 nmap <leader>dd :s/\(^.*$\)/\1\r\1/<CR>:noh<CR>
 xmap <leader>dd :'<,'>s/\(.*\)/\1\r\1/<CR>:noh<CR>
+
+" New line in normal mode
+nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
 
 " json indent
 command! -range -nargs=0 -bar IndentJson <line1>,<line2>!python -m json.tool
@@ -236,6 +255,9 @@ command! Wroot :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " fix typo
 command! W :w
 
+vnoremap <leader>j :m '>+1<CR>gv=gv
+vnoremap <leader>k :m '<-2<CR>gv=gv
+
 " visual shifting (builtin-repeat)
 vnoremap < <gv
 vnoremap > >gv
@@ -275,6 +297,8 @@ nnoremap cQ :call SetupCR()<CR>#``qz
 vnoremap <expr> cq ":\<C-u>call SetupCR()\<CR>" . "gv" . g:mc . "``qz"
 vnoremap <expr> cQ ":\<C-u>call SetupCR()\<CR>" . "gv" . substitute(g:mc, '/', '?', 'g') . "``qz"
 
+" substitute for current selection
+xnoremap gs y:%s/<C-r>"//g<Left><Left>
 
 
 " -----------------------------------------------------------------------------
@@ -334,7 +358,7 @@ vnoremap . :norm.<CR>
 
 " -----------------------------------------------------------------------------
 " Save temporary/backup files not in the local directory, but in your ~/.vim
-" directory, to keep them out of git repos. 
+" directory, to keep them out of git repos.
 " But first mkdir backup, swap, and undo first to make this work
 call system('mkdir ~/.vim')
 call system('mkdir ~/.vim/backup')

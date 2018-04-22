@@ -1,5 +1,3 @@
-
-#------------------------------------------------------------------------------
 # default stuff
 
 # If not running interactively, don't do anything
@@ -7,17 +5,6 @@ case $- in
     *i*) ;;
       *) return;;
 esac
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -38,12 +25,23 @@ pathadd "/home/${USER}/bin/"
 # PS1='\[\e[1;31m\]\u@\h\[\e[m\] $MSYSTEM \[\e[1;34m\]\w \[\e[0m\]'
 PS1='\[\e[1;31m\]\u@\h\[\e[m\] \[\e[1;34m\]\w \[\e[0m\]'
 
-alias ls="ls --color"
-alias l="ls -alh"
-alias ll="ls -alh"
-alias lls="ls -lh --color"
+# Run ssh agent only once, ignore gnome-keyring
+if ! pgrep -u "$USER" -f -x "^ssh-agent$" > /dev/null; then
+    echo "starting ssh agent"
+    ssh-agent > ~/.ssh-agent-thing
+    eval "$(<~/.ssh-agent-thing)" /dev/null
+fi
+# if [[ "$SSH_AGENT_PID" == "" ]]; then
+if [ -f ~/.ssh-agent-thing ]; then
+    eval "$(<~/.ssh-agent-thing)" > /dev/null
+fi
+
+alias ls="ls --color --group-directories-first"
+alias l="ls -alh --group-directories-first"
+alias ll="ls -lh --group-directories-first"
+alias lls="ls -lh --color --group-directories-first"
 alias cd..="cd .."
-alias lsf="ls -al | grep -i"
+alias lsf="ls -al --group-directories-first | grep -i"
 alias psf="ps aux -A | grep -i"
 alias psmem="ps aux --sort -rss"
 alias grepp="grep -Rnsi"
@@ -64,7 +62,22 @@ alias findbig="find ./ -type f -print0 | xargs -0 du | sort -n | tail -n 100 | c
 alias findbigdir="find ./ -maxdepth 1 -type d -print0 | xargs -0 du --max-depth=1 | sort -n | tail -n 50 | tail -n +1 | cut -f2 | xargs -I{} du -sh {}"
 
 alias sc="sudo systemctl"
+alias scg="systemctl | grep "
 alias sj="sudo journalctl"
+alias sl="sudo journalctl"
+alias sjf="sudo journalctl -f"
+alias slf="sudo journalctl -f"
+alias sju="sudo journalctl -u"
+alias slu="sudo journalctl -u"
+alias sjuf="sudo journalctl -f -u"
+alias sluf="sudo journalctl -f -u"
+alias sjfu="sudo journalctl -f -u"
+alias slfu="sudo journalctl -f -u"
+
+# export http_proxy="http://194.138.0.11:9400"
+# export https_proxy="https://194.138.0.11:9400"
+# export ftp_proxy="ftp://194.138.0.11:9400"
+# export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
 
 # same installation commands
 if [ -e /etc/yum.conf ] ; then
@@ -95,7 +108,7 @@ if [ -d /etc/apt ] ; then
     alias ainstall="sudo apt-get install"
     alias areinstall="sudo apt-get install --reinstall"
     alias aremove="sudo apt-get --purge remove"
-    alias asearch="sudo apt-cache search"
+    alias asearch="apt search"
     alias ashow="sudo apt-cache show"
     alias alistall="sudo apt --installed list"
     alias update="sudo apt-get update"
@@ -121,9 +134,9 @@ alias df="df -hT"
 alias du='du -ch'
 alias less_="less"
 alias less="less -r"
-# alias grep='grep --color'
-# alias grep_="grep --color=never"
-# alias grep="grep --color=always"
+alias grep='grep --color'
+alias grep_="grep --color=never"
+alias grep="grep --color=always"
 
 alias ..='cd ..'
 alias ...='cd ../../'
@@ -200,7 +213,7 @@ bind -m vi '"\e[6~":"\e[B"'
 bind -m vi-insert '"\e[6~":"\e[B"'
 
 #------------------------------------------------------------------------------
-#select best editor
+# select best editor
 if hash nvim 2>/dev/null; then
     export EDITOR=nvim
     export SUDO_EDITOR=nvim

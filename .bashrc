@@ -31,7 +31,6 @@ if ! pgrep -u "$USER" -f -x "^ssh-agent$" > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing
     eval "$(<~/.ssh-agent-thing)" /dev/null
 fi
-# if [[ "$SSH_AGENT_PID" == "" ]]; then
 if [ -f ~/.ssh-agent-thing ]; then
     eval "$(<~/.ssh-agent-thing)" > /dev/null
 fi
@@ -64,11 +63,11 @@ alias findbigdir="find ./ -maxdepth 1 -type d -print0 | xargs -0 du --max-depth=
 alias sc="sudo systemctl"
 alias scg="systemctl | grep "
 alias sj="sudo journalctl"
-alias sl="sudo journalctl"
+alias sl="sudo journalctl -e"
 alias sjf="sudo journalctl -f"
 alias slf="sudo journalctl -f"
-alias sju="sudo journalctl -u"
-alias slu="sudo journalctl -u"
+alias sju="sudo journalctl -e -u"
+alias slu="sudo journalctl -e -u"
 alias sjuf="sudo journalctl -f -u"
 alias sluf="sudo journalctl -f -u"
 alias sjfu="sudo journalctl -f -u"
@@ -95,7 +94,7 @@ if [ -e /etc/pacman.conf ] ; then
     alias ainstall="sudo pacman --color always -S"
     alias areinstall="sudo pacman --color always -S"
     alias aremove="sudo pacman --color always -R"
-    alias asearch="pacsearch"
+    alias asearch="pacman --color always -Ss"
     alias ashow="pacman --color always -Si"
     alias ashowfiles="pacman --color always -Qlq"
     alias ashowlocal="pacman --color always -Qi"
@@ -105,14 +104,14 @@ if [ -e /etc/pacman.conf ] ; then
     alias upgrade="sudo pacman --color always -Syyu"
 fi
 if [ -d /etc/apt ] ; then
-    alias ainstall="sudo apt-get install"
-    alias areinstall="sudo apt-get install --reinstall"
+    alias ainstall="sudo apt install"
+    alias areinstall="sudo apt install --reinstall"
     alias aremove="sudo apt-get --purge remove"
     alias asearch="apt search"
-    alias ashow="sudo apt-cache show"
-    alias alistall="sudo apt --installed list"
-    alias update="sudo apt-get update"
-    alias upgrade="sudo apt-get upgrade"
+    alias ashow="apt show"
+    alias alistall="apt --installed list"
+    alias update="sudo apt update"
+    alias upgrade="sudo apt upgrade"
     alias uu="update && upgrade"
 fi
 if [ -d /mingw32 ] ; then
@@ -157,7 +156,7 @@ alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
 alias updateycm='cd ~/.vim/bundle/YouCompleteMe && git pull && git pull --recurse-submodules && ./install.py --clang-completer'
-alias updateycmall='cd ~/.vim/bundle/YouCompleteMe && git pull && git pull --recurse-submodules && ./install.py --clang-completer --gocode-completer --tern-completer --tern-completer'
+alias updateycmall='cd ~/.vim/bundle/YouCompleteMe && git pull && git pull --recurse-submodules && ./install.py --clang-completer --gocode-completer --tern-completer'
 
 ## get top process eating cpu ##
 alias pscpu='ps auxf | sort -nr -k 3'
@@ -165,6 +164,8 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 
 ## Get server cpu info ##
 alias cpuinfo='lscpu'
+
+alias vimlog='sed -r "s/\x1B\[([0-9];)?([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" | vim -R -c "set filetype=log nowrap" -'
 
 weather() {
 curl -s wttr.in/$1
@@ -193,6 +194,8 @@ fi
 # http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
 set -o vi
 
+# set color TERM
+test $TERM = xterm && TERM=xterm-256color
 
 # bind home and end to ESC+insert on ^ and $
 # http://stackoverflow.com/questions/4200800/in-bash-how-do-i-bind-a-function-key-to-a-command
@@ -221,15 +224,18 @@ if hash nvim 2>/dev/null; then
     # fix Ctrl+H for neovim + tmux
     infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > ~/$TERM.ti ; tic ~/$TERM.ti
     alias vim="nvim"
+    alias suvim="sudo -E nvim"
 elif hash vim 2>/dev/null; then
     export EDITOR=vim
     export SUDO_EDITOR=vim
     export GIT_EDITOR=vim
+    alias suvim="sudo -E vim"
 else
     export EDITOR=vi
     export SUDO_EDITOR=vi
     export GIT_EDITOR=vi
     alias vim="vi"
+    alias suvim="sudo -E vi"
 fi
 
 

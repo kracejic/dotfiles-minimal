@@ -4,8 +4,10 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 "General
-set number  "Show line numbers
-set relativenumber
+" set number  "Show line numbers
+" set relativenumber
+set nonu
+set nornu
 nmap <leader>num :set nu! <CR>:set rnu!<CR>
 nmap <leader>gnum :set g:nu! <CR>:set g:rnu!<CR>
 set wrap  "enable wraping
@@ -188,8 +190,16 @@ augroup END
 
 
 let g:syntastic_cpp_compiler_options = "-std=c++14"
+let g:syntastic_java_checkers = []
 " add constant
-nmap <leader>acr /[,)]<CR>:nohlsearch<CR>Bhi&<ESC>?[,(]<CR>:nohlsearch<CR>wiconst <ESC>
+nmap <leader>cre /[,)]<CR>:nohlsearch<CR>Bhi&<ESC>?[,(]<CR>:nohlsearch<CR>wiconst <ESC>
+
+noremap <leader>cr :pyf ~/bin/clang-rename.py<cr>
+
+:nmap \e :NERDTreeToggle<CR>
+":nmap \t w setlocal wrap!<CR>:setlocal wrap?
+":command Wrap setlocal wrap!<CR>:setlocal wrap?
+":command :wrapt setlocal wrap!<CR>:setlocal wrap?<CR> " change wrapping
 command! E :e %:p:h
 command! LS :!ls -alh --color=always %:p:h
 

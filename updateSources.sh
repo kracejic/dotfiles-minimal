@@ -1,7 +1,7 @@
 #!/bin/sh
 
-vimdiff $HOME/.bashrc ./.bashrc
-vimdiff $HOME/.gitconfig ./.gitconfig
-vimdiff $HOME/.vimrc ./.vimrc
-vimdiff $HOME/.tmux.conf ./.tmux.conf
+vim -d $HOME/.bashrc ./.bashrc
+vim -d $HOME/.gitconfig ./.gitconfig
+vim -d $HOME/.vimrc ./.vimrc
+vim -d $HOME/.tmux.conf ./.tmux.conf
 

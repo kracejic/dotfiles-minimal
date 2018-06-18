@@ -3,7 +3,7 @@
 #     email = name@gmail.com
 
 [core]
-    pager = less -r
+	pager = less -S
 
 [color]
     ui = auto
@@ -48,7 +48,7 @@
     mnff = merge --no-ff
 
     rb = rebase
-    rba = rebase --autosquash
+    rba = rebase --autosquash -i
     rbi = rebase -i
     rbcont = rebase --continue
     rbas = rebase --autostash
@@ -66,6 +66,7 @@
 
     #graphs
     g = log --oneline --decorate --graph --all
+    gg = log --oneline --decorate --graph
 
     go = log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --decorate --abbrev-commit
     god = log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset' --decorate --abbrev-commit
@@ -166,6 +167,7 @@
     nevermindall = !git reset --hard HEAD && git clean -d -f
     # as above, but keeps untraced
     nevermind = reset --hard HEAD
+    nevermindunstaged = checkout -- .
 
     diffstaged = diff --cached --diff-algorithm=minimal -w
 

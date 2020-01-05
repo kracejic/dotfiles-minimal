@@ -140,6 +140,12 @@ command! Spellnone :setlocal nospell
 :nmap [Q :cfirst<CR>
 :nmap ]Q :clast<CR>
 
+" location list next, prev
+:nmap [e :lprev<CR>
+:nmap ]e :lnext<CR>
+:nmap [E :lfirst<CR>
+:nmap ]E :llast<CR>
+
 " Theme stuff
 "let base16colorspace=256  " Access colors present in 256 colorspace
 set background=dark
@@ -148,6 +154,7 @@ nnoremap <leader>2 :colorscheme molokai<cr>:AirlineTheme base16_monokai<cr>
 nnoremap <leader>3 :colorscheme themeinabox<cr>:AirlineTheme base16_eighties<cr>
 nnoremap <leader>4 :colorscheme themeinabox-light<cr>:AirlineTheme sol<cr>
 nnoremap <leader>5 :colorscheme themeinabox-transparent<cr>:AirlineTheme base16_eighties<cr>
+nnoremap <leader>6 :colorscheme themeinabox-blue<cr>:AirlineTheme base16_grayscale<cr>
 
 " get current syntax class
 nmap <leader>sy :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -167,7 +174,7 @@ nmap <leader>dd :s/\(^.*$\)/\1\r\1/<CR>:noh<CR>
 xmap <leader>dd :'<,'>s/\(.*\)/\1\r\1/<CR>:noh<CR>
 
 " New line in normal mode
-nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+" nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
 
 " json indent
 command! -range -nargs=0 -bar IndentJson <line1>,<line2>!python -m json.tool
@@ -186,6 +193,7 @@ augroup filetypedetect
     au BufReadPost,BufNewFile config.in set ft=kconfig
     au BufReadPost,BufNewFile *.xml set tabstop=4
     au BufReadPost,BufNewFile *.crt set ft=crt
+    au BufReadPost,BufNewFile *.gsh set ft=Jenkinsfile
 augroup END
 
 

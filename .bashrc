@@ -45,6 +45,8 @@ alias psf="ps aux -A | grep -i"
 alias psmem="ps aux --sort -rss"
 alias grepp="grep -Rnsi"
 alias c="clear"
+alias ip="ip -color=always"
+alias ips="ip -color=always -br a"
 
 alias g="git"
 
@@ -61,7 +63,7 @@ alias findbig="find ./ -type f -print0 | xargs -0 du | sort -n | tail -n 100 | c
 alias findbigdir="find ./ -maxdepth 1 -type d -print0 | xargs -0 du --max-depth=1 | sort -n | tail -n 50 | tail -n +1 | cut -f2 | xargs -I{} du -sh {}"
 
 alias sc="sudo systemctl"
-alias scg="systemctl | grep "
+alias scg="systemctl | grep -i "
 alias sj="sudo journalctl"
 alias sl="sudo journalctl -e"
 alias sjf="sudo journalctl -f"
@@ -101,7 +103,8 @@ if [ -e /etc/pacman.conf ] ; then
     alias alistall="pacman --color always -Q"
     alias alistallexplicit="pacman --color always -Qqe"
     alias update="sudo pacman --color always -Qu"
-    alias upgrade="sudo pacman --color always -Syyu"
+    alias upgrade="sudo pacman --color always -Syu"
+    alias upgradeforce="sudo pacman --color always -Syyu"
 fi
 if [ -d /etc/apt ] ; then
     alias ainstall="sudo apt install"

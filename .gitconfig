@@ -71,6 +71,12 @@
     go = log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --decorate --abbrev-commit
     god = log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset' --decorate --abbrev-commit
 
+    go2 = log --graph --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --decorate --abbrev-commit
+    god2 = log --graph --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset' --decorate --abbrev-commit
+
+    glo2 = log --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --decorate --abbrev-commit
+    glod2 = log --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset' --decorate --abbrev-commit
+
     # date ordered
     gdd = log --graph --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --decorate --abbrev-commit --all --author-date-order
     gd = log --oneline --decorate --graph --all --author-date-order
@@ -94,6 +100,9 @@
     gdifff = log --oneline --decorate --graph --follow --full-history -p  -c --color-words -b
     gldiff = log --format=medium --decorate --graph -p  -c
     gldifff = log --format=medium --decorate --graph --follow -p  -c
+
+    gldd = log --decorate --graph --stat --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset%n'
+    glddf = log --decorate --graph --all --full-history --stat --pretty=format:'%C(yellow)%h%Creset%C(red bold)%d%Creset %s %Cgreen(%ci) %C(blue)<%an>%Creset%n'
 
     # https://salferrarello.com/using-vim-view-git-commits/
     # View commit with K (upper case k)
@@ -131,6 +140,7 @@
     tags = tag
     stashes = stash list
     remotes = remote -v
+    upstream = branch --set-upstream-to
 
     stash-all = stash save --include-untracked
     unstage = reset -q HEAD --
@@ -145,10 +155,19 @@
     # Show which commits are safe to amend/rebase
     unpushed = log @{u}..
     # Show what you've done since yesterday to prepare your standup
-    standup = "!git log --since yesterday --author $(git config user.email) --pretty=short --stat"
+    daily = "!git log --since yesterday --author $(git config user.email) --pretty=short --stat"
+    daily1w = "!git log --since '1 weeks ago' --author $(git config user.email) --pretty=short --stat"
+    daily2w = "!git log --since '2 weeks ago' --author $(git config user.email) --pretty=short --stat"
+    daily3w = "!git log --since '3 weeks ago' --author $(git config user.email) --pretty=short --stat"
+    daily4w = "!git log --since '4 weeks ago' --author $(git config user.email) --pretty=short --stat"
     # Show the history difference between a local branche and its remote
-    divergence = "!git log --left-right --graph --cherry-pick --oneline $1...origin/$1"
+    divergence = "!git log --left-right --graph --cherry-pick --oneline $1..origin/$1"
+    divergence2 = "!git log --left-right --graph --cherry-pick --oneline $1..$2"
     # divergence = log --left-right --graph --cherry-pick --oneline $1...origin/$1
+
+    # Which branches contain a commit with hash $1
+    contains = branch -a --contains
+
 
     # find file in repo
     find = "!git ls-files | grep -i"
@@ -202,3 +221,5 @@
     autocorrect = 30
 [commit]
     verbose = 1
+[cola]
+    spellcheck = false

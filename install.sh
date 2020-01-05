@@ -1,7 +1,7 @@
 #!/bin/sh
 
-ln -s $HOME/bin/.bashrc ~/.bashrc
-ln -s $HOME/bin/.gitconfig ~/.gitconfig
-ln -s $HOME/bin/.vimrc ~/.vimrc
-ln -s $HOME/bin/.tmux.conf ~/.tmux.conf
+ln -sf $HOME/bin/.bashrc ~/.bashrc
+ln -sf $HOME/bin/.gitconfig ~/.gitconfig
+ln -sf $HOME/bin/.vimrc ~/.vimrc
+ln -sf $HOME/bin/.tmux.conf ~/.tmux.conf
 
